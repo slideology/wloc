@@ -10,6 +10,7 @@
 | Loon | `https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/geo/modules/wloc.lpx` |
 | Stash | `https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/geo/modules/wloc.stoverride` |
 | QuantumultX | `https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/geo/modules/wloc.conf` |
+| Shadowrocket(小火箭) | `https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/geo/modules/wloc.module` |
 
 MITM 主机名：`gs-loc.apple.com, gs-loc-cn.apple.com`
 
