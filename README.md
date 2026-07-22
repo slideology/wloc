@@ -11,31 +11,36 @@
 ## 订阅地址
 
 **Surge:**
-https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.sgmodule
+https://raw.githubusercontent.com/slideology/wloc/refs/heads/main/modules/wloc.sgmodule
 
 **Quantumult X:**
-https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.conf
+https://raw.githubusercontent.com/slideology/wloc/refs/heads/main/modules/wloc.conf
 
 **Loon:**
-https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.lpx
+https://raw.githubusercontent.com/slideology/wloc/refs/heads/main/modules/wloc.lpx
 
 **Stash:**
-https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.stoverride
+https://raw.githubusercontent.com/slideology/wloc/refs/heads/main/modules/wloc.stoverride
 
 **Shadowrocket(小火箭):**
-https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.module
+https://raw.githubusercontent.com/slideology/wloc/refs/heads/main/modules/wloc.module
 
 > Egern 可直接使用 Surge 模块
 > Stash 请直接订阅上面的 `.stoverride`，无需用 Script Hub 转换
 
 ---
 
-## 快捷指令（推荐，最方便）
+## 自建选点页面
 
-直接用快捷指令切换 / 清除定位，无需打开选点页面：
+https://wloc-spoofer.slideology0816.workers.dev/
 
-- **wloc 设置地理位置**：https://www.icloud.com/shortcuts/a82717d8fdad4e6280866fcf911173f7
-- **wloc 清理恢复位置**：https://www.icloud.com/shortcuts/f42632d406504f24a2cd163af4fe012f
+直接打开页面即可选点、储存和清除定位。页面、解析 API、代理模块和代理脚本均由本仓库及自建 Cloudflare Worker 提供。
+
+## 快捷指令（可选）
+
+快捷指令必须复制到自己的 iCloud，并把其中的解析接口设置为：
+
+`https://wloc-spoofer.slideology0816.workers.dev/api/parse`
 
 **用法**
 
@@ -52,17 +57,17 @@ https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.modul
 
 ### 关于地图链接解析（worker）
 
-为了让苹果地图和高德走同一条流程，链接统一发给 `wloc-spoofer.wloc.workers.dev/api/parse` 解析：
+为了让苹果地图和高德走同一条流程，链接统一发给 `wloc-spoofer.slideology0816.workers.dev/api/parse` 解析：
 
 - **高德**：分享出来是短链，真实坐标只藏在 302 跳转的 `Location` 头里，且是 GCJ-02 偏移坐标。快捷指令既读不到跳转头、也难做坐标换算，所以由 worker 跟跳转 → 抠坐标 → GCJ-02→WGS84 → 返回经纬度。
 - **苹果地图**：链接里直接带 `coordinate=纬度,经度`，但在**中国大陆同样是 GCJ-02 偏移坐标**，所以和高德一样由 worker 做 GCJ-02→WGS84 换算后返回；境外坐标会自动跳过换算（`out_of_china` 判断）原样返回。除了统一坐标系，走同一接口也方便统一处理短链、文本夹链接、名称解码等。
 
 **隐私：** `/api/parse` 是纯转发解析——收到链接 → 跟跳转 → 解析坐标 → 返回 JSON，全程不写任何存储、不记日志、不缓存，处理完即丢。
 
-**不放心可自行部署：** worker 源码完全开源，可自己部署一份替换上面的地址：
+**Worker 源码：**
 
 - 解析逻辑：[`worker/src/parse.js`](worker/src/parse.js)，路由：[`worker/src/index.js`](worker/src/index.js)
-- 部署后把快捷指令里的 `wloc-spoofer.wloc.workers.dev` 换成你自己的 worker 域名即可。
+- 当前生产 Worker 为 `wloc-spoofer.slideology0816.workers.dev`。
 
 ---
 
@@ -70,7 +75,7 @@ https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.modul
 <summary><b>使用方法</b></summary>
 
 1. 订阅模块并启用 MITM
-2. 打开在线选点页面（公共 Worker，建议添加到主屏幕）
+2. 打开自建选点页面（建议添加到主屏幕）
 3. 地图选位置 / 搜索地名 / 粘贴地图链接
 4. 点击「储存到设备」
 5. 下次 Apple 定位触发时自动生效
@@ -173,14 +178,13 @@ https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.modul
 <details>
 <summary><b>自部署 Worker（推荐）</b></summary>
 
-公共选点页面有请求上限，建议部署自己的实例：
+当前自有实例：
 
-- **Workers**: `https://wloc-spoofer.wloc.workers.dev/`
-- **Pages**: `https://wloc-pages.pages.dev/`
+- **Workers**: `https://wloc-spoofer.slideology0816.workers.dev/`
 
 **一键部署（Workers）：**
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Yu9191/wloc/tree/main/worker)
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/slideology/wloc/tree/main/worker)
 
 > 一键部署仅支持 Workers 模式，点击按钮后按提示授权即可完成部署。
 
@@ -188,7 +192,7 @@ https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.modul
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/Yu9191/wloc.git
+git clone https://github.com/slideology/wloc.git
 cd wloc/worker
 
 # 2. 安装依赖
@@ -211,7 +215,7 @@ npm run deploy
 Pages 部署不支持一键按钮，需要手动执行：
 
 ```bash
-git clone https://github.com/Yu9191/wloc.git
+git clone https://github.com/slideology/wloc.git
 cd wloc/worker
 npm install
 npx wrangler pages deploy dist --project-name <自定义项目名>
